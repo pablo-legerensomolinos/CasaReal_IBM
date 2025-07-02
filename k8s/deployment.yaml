@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: project-backend
+  namespace: mvp-project
+  labels:
+    app: project-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-backend
+  template:
+    metadata:
+      namespace: mvp-project
+      labels:
+        app: project-backend
+    spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: project-db2-cert
+            defaultMode: 420
+      containers:
+        - name: project-backend
+          securityContext:
+           readOnlyRootFilesystem: false
+           runAsNonRoot: false
+           runAsUser: 1000650000
+          image: de.icr.io/mvp-project/project-backend
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: secret-volume
+              readOnly: true
+              mountPath: /certificate
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: project-backend-cm
+      imagePullSecrets:
+        - name: icr-credentials
