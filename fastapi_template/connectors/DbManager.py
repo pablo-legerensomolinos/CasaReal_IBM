@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from sqlalchemy import create_engine, Connection
-=======
 from sqlalchemy import create_engine, Connection, text
->>>>>>> ca9c168 (Update repo)
 from sqlalchemy.orm import sessionmaker
 
 from fastapi_template.Logger import Logger
@@ -46,9 +42,6 @@ class DatabaseManager(metaclass=Singleton):
 
     def getLastFiles(self) -> list[LastFiles]:
         return self.session.query(LastFiles).all()
-<<<<<<< HEAD
-=======
-    
     
     def execute_sql(self, sql: str) -> list[dict]:
         """
@@ -57,4 +50,3 @@ class DatabaseManager(metaclass=Singleton):
         self.logger.info(f"Executing SQL: {sql}")
         result = self.connection.execute(text(sql))
         return [dict(row) for row in result]
->>>>>>> ca9c168 (Update repo)

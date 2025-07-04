@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-from fastapi import APIRouter
-
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.WatsonxClient import WatsonxClient
-from fastapi_template.env import WatsonxConfig
-=======
 from fastapi import APIRouter, HTTPException, Request
 from fastapi_template.Logger import Logger
 from fastapi_template.connectors.WatsonxClient import WatsonxClient
 from fastapi_template.env import WatsonxConfig
 from fastapi_template.business_logic.nl_to_sql import process_nl_query
->>>>>>> ca9c168 (Update repo)
 
 logger = Logger("api_logger").logger
 watsonx_bp = APIRouter(prefix='/api/wx', tags=["watsonX.ai"])
@@ -22,8 +14,6 @@ def wxai_test():
     list_models = wx_client.list_models()
     tokenize = wx_client.tokenize("tokenize this phrase")
     return {"list_models": list_models, "tokenize": tokenize}
-<<<<<<< HEAD
-=======
 
 @watsonx_bp.post('/query', summary="Procesar consulta en lenguaje natural")
 async def wxai_nl_to_sql(request: Request):
@@ -43,4 +33,3 @@ async def wxai_nl_to_sql(request: Request):
     except Exception as e:
         logger.error(f"Error procesando la consulta: {e}")
         raise HTTPException(status_code=500, detail="Error interno al procesar la consulta.")
->>>>>>> ca9c168 (Update repo)
