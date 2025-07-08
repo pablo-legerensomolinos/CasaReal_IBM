@@ -3,7 +3,7 @@ from sqlalchemy.orm import mapped_column
 from pydantic import BaseModel
 from typing import Optional
 
-from fastapi_template.models.BaseModel import Base
+from backend_database_query.models.BaseModel import Base
 
 class LastFiles(Base):
     __tablename__ = 'LAST_FILES'

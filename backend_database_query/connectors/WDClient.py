@@ -7,8 +7,8 @@ import ast
 from ibm_watson import DiscoveryV2
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.Singleton import Singleton
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.Singleton import Singleton
 
 
 class WDClient(metaclass=Singleton):

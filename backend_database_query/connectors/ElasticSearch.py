@@ -2,9 +2,9 @@ from os import getcwd
 
 from elasticsearch import Elasticsearch, helpers
 
-from fastapi_template.Logger import Logger
-from fastapi_template.env import LogConfig
-from fastapi_template.connectors.Singleton import Singleton
+from backend_database_query.Logger import Logger
+from backend_database_query.env import LogConfig
+from backend_database_query.connectors.Singleton import Singleton
 
 
 class ElasticSearchClient(metaclass=Singleton):

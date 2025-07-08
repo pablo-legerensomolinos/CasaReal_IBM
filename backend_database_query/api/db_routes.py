@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.DbManager import DatabaseManager
-from fastapi_template.env import Db2Config
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.DbManager import DatabaseManager
+from backend_database_query.env import Db2Config
 
-from fastapi_template.models.LastFilesModel import LastFilesAPI
+from backend_database_query.models.LastFilesModel import LastFilesAPI
 
 logger = Logger("api_logger").logger
 db_bp = APIRouter(prefix='/api/db2', tags=['DB2'])

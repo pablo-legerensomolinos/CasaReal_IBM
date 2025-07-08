@@ -1,10 +1,10 @@
 import boto3
 from botocore.client import Config
 
-from fastapi_template.connectors.Singleton import Singleton
-from fastapi_template.Logger import Logger
+from backend_database_query.connectors.Singleton import Singleton
+from backend_database_query.Logger import Logger
 
-from fastapi_template.env import LogConfig
+from backend_database_query.env import LogConfig
 
 
 class S3Client(metaclass=Singleton):

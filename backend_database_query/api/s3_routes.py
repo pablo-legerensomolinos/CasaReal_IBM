@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.S3Client import S3Client
-from fastapi_template.env import S3Config
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.S3Client import S3Client
+from backend_database_query.env import S3Config
 
 logger = Logger("api_logger").logger
 

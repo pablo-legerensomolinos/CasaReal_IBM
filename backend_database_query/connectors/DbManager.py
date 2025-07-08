@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine, Connection, text
 from sqlalchemy.orm import sessionmaker
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.Singleton import Singleton
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.Singleton import Singleton
 
-from fastapi_template.models.LastFilesModel import LastFiles
+from backend_database_query.models.LastFilesModel import LastFiles
 
 
 class DatabaseManager(metaclass=Singleton):

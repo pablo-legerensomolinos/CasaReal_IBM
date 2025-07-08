@@ -62,8 +62,10 @@ class WatsonxAPIConfig:
 
 
 class WatsonxConfig(WatsonxAPIConfig):
-    deployment_id = config_env.get("WATSONX_DEPLOYMENT_ID")
+    deployment_id = config_env.get("WATSONX_AI_DEPLOYMENT_ID")
     model_id = config_env.get("WATSONX_MODEL_ID")
+
+WATSONX_AI_DEPLOYMENT_INTERPRETATION_ID = config_env.get("WATSONX_AI_DEPLOYMENT_INTERPRETATION_ID")  # Default model for interpretation
 
 class WatsonxSampleInheritanceSample(WatsonxConfig):
     # sample on how to use inheritance on the envs to not having to duplicate envs

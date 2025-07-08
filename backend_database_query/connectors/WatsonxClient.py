@@ -7,10 +7,10 @@ from ibm_watsonx_ai.foundation_models.schema import TextChatParameters
 from ibm_watsonx_ai.utils.utils import HttpClientConfig
 import requests
 
-from fastapi_template.Logger import Logger
-from fastapi_template.env import LogConfig
-from fastapi_template.connectors.Singleton import Singleton
-from fastapi_template.env import WatsonxAPIConfig, WatsonxConfig
+from backend_database_query.Logger import Logger
+from backend_database_query.env import LogConfig
+from backend_database_query.connectors.Singleton import Singleton
+from backend_database_query.env import WatsonxAPIConfig, WatsonxConfig
 
 
 class WatsonxAPIClient(metaclass=Singleton):
@@ -45,62 +45,98 @@ class WatsonxClient(metaclass=Singleton):
         self.project_id = watsonxconfig.project_id
         self.space_id = watsonxconfig.space_id
         self.model_id = watsonxconfig.model_id
-
         self.deployment_id = watsonxconfig.deployment_id
 
-        model_data = {
-            "deployment_id": self.deployment_id,
-            "api_client": self.client,
-            "validate": False
-        }
-        if self.project_id:
-            model_data['project_id'] = self.project_id
-        elif self.space_id:
-            model_data['space_id'] = self.space_id
-        else:
+        if not (self.project_id or self.space_id):
             raise Exception(
                 'Project ID or Space ID required for Watsonx AI model inference')
-
-        self.model = ModelInference(**model_data)
+        
         self.logger.debug("WatsonX Client successfully initialized.")
 
-    def text_generation(self, prompt_query: str = None, params: dict = None, label: str = ""):
+        # model_data = {
+        #     "deployment_id": self.deployment_id,
+        #     "api_client": self.client,
+        #     "validate": False
+        # }
+        # if self.project_id:
+        #     model_data['project_id'] = self.project_id
+        # elif self.space_id:
+        #     model_data['space_id'] = self.space_id
+        # else:
+        #     raise Exception(
+        #         'Project ID or Space ID required for Watsonx AI model inference')
+
+        # self.model = ModelInference(**model_data)
+
+
+    def text_generation(self, deployment_id: str = None, params: dict = None):
         self.logger.debug(
             f"Called text generation")
         response = None
-        retry = True
-        # retry in case WX dies
-        while retry:
-            try:
-                response = self.model.generate_text(
-                    prompt=prompt_query, params=params)
-                self.logger.debug(f"generated ok {response}")
 
-                retry = False
-            except Exception as e:
-                if hasattr(e, 'message'):
-                    print(e.message)
-                else:
-                    print(e)
-        return response
+        try:
+            response = self.client.generate_text(
+                model_id=self.model_id,
+                deployment_id=deployment_id or self.deployment_id,
+                project_id=self.project_id,
+                space_id=self.space_id if not self.project_id else None,
+                params=params
+            )
+            self.logger.debug(f"Generated OK: {response}")
+            return response
 
-    def text_generation_stream(self, prompt_query: str = None, params: dict = None):
+        except Exception as e:
+            self.logger.error(f"Text generation error: {str(e)}")
+            raise
+
+        # retry = True
+        # # retry in case WX dies
+        # while retry:
+        #     try:
+        #         response = self.model.generate_text(
+        #             prompt=prompt_query, params=params)
+        #         self.logger.debug(f"generated ok {response}")
+
+        #         retry = False
+        #     except Exception as e:
+        #         if hasattr(e, 'message'):
+        #             print(e.message)
+        #         else:
+        #             print(e)
+        # return response
+
+    def text_generation_stream(self, deployment_id: str = None, params: dict = None):
         self.logger.debug(
             f"Called text stream generation")
         response = None
-        retry = True
-        while retry:
-            try:
-                response = self.model.generate_text_stream(
-                    prompt=prompt_query, params=params)
-                self.logger.debug(f"generated ok {response}")
-                retry = False
-            except Exception as e:
-                if hasattr(e, 'message'):
-                    print(e.message)
-                else:
-                    print(e)
-        return response
+        try:
+            response = self.client.generate_text_stream(
+                model_id=self.model_id,
+                deployment_id=deployment_id or self.deployment_id,
+                project_id=self.project_id,
+                space_id=self.space_id if not self.project_id else None,
+                params=params
+            )
+            self.logger.debug(f"Stream generated OK")
+            return response
+
+        except Exception as e:
+            self.logger.error(f"Stream generation error: {str(e)}")
+            raise
+
+        # retry = True
+        # while retry:
+        #     try:
+        #         response = self.model.generate_text_stream(
+        #             prompt=prompt_query, params=params)
+        #         self.logger.debug(f"generated ok {response}")
+        #         retry = False
+        #     except Exception as e:
+        #         if hasattr(e, 'message'):
+        #             print(e.message)
+        #         else:
+        #             print(e)
+        # return response
     
     def vision_request(self, encoded_image: str, user_prompt: str, params: dict = None):
         self.logger.debug(
@@ -159,3 +195,4 @@ class WatsonxClient(metaclass=Singleton):
             url=self.wx_cloud_url, model_id=self.model_id)
         self.logger.debug(f"Model details: {model_detail}")
         return model_detail
+

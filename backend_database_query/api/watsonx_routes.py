@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Request
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.WatsonxClient import WatsonxClient
-from fastapi_template.env import WatsonxConfig
-from fastapi_template.business_logic.nl_to_sql import process_nl_query
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.WatsonxClient import WatsonxClient
+from backend_database_query.env import WatsonxConfig
+from backend_database_query.business_logic.nl_to_sql import process_nl_query
 
 logger = Logger("api_logger").logger
 watsonx_bp = APIRouter(prefix='/api/wx', tags=["watsonX.ai"])

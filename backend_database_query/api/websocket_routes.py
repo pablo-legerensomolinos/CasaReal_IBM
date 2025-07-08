@@ -1,8 +1,8 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from fastapi_template.Logger import Logger
+from backend_database_query.Logger import Logger
 
-from fastapi_template.connectors.WebSocketManager import WebSocketManager
+from backend_database_query.connectors.WebSocketManager import WebSocketManager
 
 '''
 Note:   WebSockets (auto)documentation on OpenAPI generated on /docs will not

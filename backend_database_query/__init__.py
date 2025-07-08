@@ -140,7 +140,7 @@ app = create_app()
 
 def start(reload: bool = False):
     """Launched with `poetry run start` at root level"""
-    uvicorn.run("fastapi_template:app", host="0.0.0.0",
+    uvicorn.run("backend_database_query:app", host="0.0.0.0",
                 port=8000, reload=reload)
 
 

@@ -1,9 +1,9 @@
 from langchain_ibm import WatsonxEmbeddings
-from fastapi_template.connectors.Singleton import Singleton
+from backend_database_query.connectors.Singleton import Singleton
 from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames as EmbedParams
 
-from fastapi_template.connectors.WatsonxClient import WatsonxAPIClient
-from fastapi_template.env import EmbeddingsConfig
+from backend_database_query.connectors.WatsonxClient import WatsonxAPIClient
+from backend_database_query.env import EmbeddingsConfig
 
 
 class EmbeddingClient(metaclass=Singleton):

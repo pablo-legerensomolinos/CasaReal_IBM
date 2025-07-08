@@ -2,9 +2,9 @@ from fastapi import APIRouter, Path
 from fastapi.responses import PlainTextResponse
 from typing import Annotated
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.CosClient import CosClient
-from fastapi_template.env import CosConfig
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.CosClient import CosClient
+from backend_database_query.env import CosConfig
 
 
 logger = Logger("api_logger").logger

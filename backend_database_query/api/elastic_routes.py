@@ -3,9 +3,9 @@ from pydantic import BaseModel, Field
 from typing import Optional
 import traceback
 
-from fastapi_template.Logger import Logger
-from fastapi_template.connectors.ElasticSearch import ElasticSearchClient
-from fastapi_template.env import ElasticConfig
+from backend_database_query.Logger import Logger
+from backend_database_query.connectors.ElasticSearch import ElasticSearchClient
+from backend_database_query.env import ElasticConfig
 
 logger = Logger("api_logger").logger
 elastic_bp = APIRouter(prefix='/api/elastic', tags=['ElasticSearch'])

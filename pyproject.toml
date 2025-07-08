@@ -1,5 +1,5 @@
 [project]
-name = "fastapi_template"
+name = "backend_database_query"
 version = "0.1.0"
 description = "FastAPI template for engagement quick start"
 authors = [
@@ -37,5 +37,5 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [project.scripts]
-dev = "fastapi_template:start_dev"
-pro = "fastapi_template:start"
+dev = "backend_database_query:start_dev"
+pro = "backend_database_query:start"

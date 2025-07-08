@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Request, Depends
 from typing import Annotated
 
-from fastapi_template.env import VerifyConfig
-from fastapi_template.connectors.VerifyDecorator import VerifyValidator
+from backend_database_query.env import VerifyConfig
+from backend_database_query.connectors.VerifyDecorator import VerifyValidator
 
 import hashlib
 import base64

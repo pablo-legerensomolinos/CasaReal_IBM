@@ -1,9 +1,9 @@
 from typing                                     import Annotated
 from fastapi                                    import APIRouter, Depends, Request
-from fastapi_template.Logger                    import Logger
+from backend_database_query.Logger                    import Logger
 
-from fastapi_template.env                       import HttpBasicAuthConfig
-from fastapi_template.connectors.HttpBasicAuth  import HttpBasicAuth
+from backend_database_query.env                       import HttpBasicAuthConfig
+from backend_database_query.connectors.HttpBasicAuth  import HttpBasicAuth
 
 logger       = Logger("api_logger").logger
 

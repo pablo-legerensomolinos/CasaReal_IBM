@@ -2,12 +2,12 @@ from pymilvus import MilvusClient as MC
 from pymilvus import AnnSearchRequest, CollectionSchema
 from pymilvus import WeightedRanker, RRFRanker
 
-from fastapi_template.Logger import Logger
-from fastapi_template.env import LogConfig
-from fastapi_template.connectors.Singleton import Singleton
-from fastapi_template.connectors.EmbeddingsClient import EmbeddingClient
+from backend_database_query.Logger import Logger
+from backend_database_query.env import LogConfig
+from backend_database_query.connectors.Singleton import Singleton
+from backend_database_query.connectors.EmbeddingsClient import EmbeddingClient
 
-from fastapi_template.env import MilvusConfig, EmbeddingsConfig, WatsonxAPIConfig
+from backend_database_query.env import MilvusConfig, EmbeddingsConfig, WatsonxAPIConfig
 
 
 class MilvusClient(metaclass=Singleton):

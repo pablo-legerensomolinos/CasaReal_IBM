@@ -2,9 +2,9 @@ from fastapi import WebSocket
 from uuid import uuid4
 
 from .Singleton import Singleton
-from fastapi_template.Logger import Logger
+from backend_database_query.Logger import Logger
 
-from fastapi_template.env import LogConfig
+from backend_database_query.env import LogConfig
 
 # use this info on the other websockets
 
