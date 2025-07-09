@@ -21,7 +21,7 @@ COPY README.md README.md
 RUN poetry config virtualenvs.create false --local && chmod +r /app/poetry.toml
 RUN poetry install --no-root
 
-COPY fastapi_template fastapi_template
+COPY backend_database_query backend_database_query
 RUN poetry install
 
 # load file to parse certificates from base64 envs
