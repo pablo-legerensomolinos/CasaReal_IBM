@@ -42,7 +42,7 @@ def process_nl_query(nl_query: str) -> list:
     # 2. Ejecutar SQL
     db = DatabaseManager(db2_config)
     try:
-        result_rows = db.execute_sql(sql_query)
+        result_rows = db.execute_raw_sql(sql_query)
     except Exception as e:
         db.logger.error(f"Error ejecutando SQL: {e}")
         return "Error al ejecutar la consulta en la base de datos."

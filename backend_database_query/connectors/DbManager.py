@@ -17,6 +17,7 @@ class DatabaseManager(metaclass=Singleton):
         self.connection_string = (
             f"db2://{db2config.username}:{db2config.password}"
             f"@{db2config.hostname}:{db2config.port}/{db2config.database}?"
+            f"CurrentSchema={db2config.schema};"
             f"SSLServerCertificate={db2config.ssl_server_certificate};"
             f"Security={db2config.security}"
         )
@@ -50,3 +51,11 @@ class DatabaseManager(metaclass=Singleton):
         self.logger.info(f"Executing SQL: {sql}")
         result = self.connection.execute(text(sql))
         return [dict(row) for row in result]
+
+    def execute_raw_sql(self, sql: str) -> list[dict]:
+        """
+        Executes a raw SQL query and returns the results as a list of dictionaries.
+        """
+        self.logger.info(f"Executing SQL: {sql}")
+        result = self.connection.execute(text(sql))
+        return [row._mapping for row in result]
