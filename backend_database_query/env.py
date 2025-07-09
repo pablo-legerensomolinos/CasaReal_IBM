@@ -51,19 +51,19 @@ class Db2Config:
 
 
 class WatsonxAPIConfig:
-    apikey = config_env.get("WATSONX_AI_APIKEY")
-    url = config_env.get("WATSONX_AI_HOST")
-
-    # provide one of these
-    project_id = config_env.get("WATSONX_AI_PROJECT_ID")
-    space_id = config_env.get("WATSONX_AI_SPACE_ID")
-
-    limits = int(config_env.get('WATSONX_AI_LIMITS', 50))
+    def __init__(self):
+        self.apikey = config_env.get("WATSONX_AI_APIKEY")
+        self.url = config_env.get("WATSONX_AI_HOST")
+        self.project_id = config_env.get("WATSONX_AI_PROJECT_ID")
+        self.space_id = config_env.get("WATSONX_AI_SPACE_ID")
+        self.limits = int(config_env.get('WATSONX_AI_LIMITS', 50))
 
 
 class WatsonxConfig(WatsonxAPIConfig):
-    deployment_id = config_env.get("WATSONX_AI_DEPLOYMENT_ID")
-    model_id = config_env.get("WATSONX_MODEL_ID")
+    def __init__(self, deployment_id=None, model_id=None):
+        super().__init__()  # <-- This initializes url, apikey, etc.
+        self.deployment_id = deployment_id or config_env.get("WATSONX_AI_DEPLOYMENT_ID")
+        self.model_id = model_id or config_env.get("WATSONX_MODEL_ID", None)
 
 WATSONX_AI_DEPLOYMENT_INTERPRETATION_ID = config_env.get("WATSONX_AI_DEPLOYMENT_INTERPRETATION_ID")  # Default model for interpretation
 

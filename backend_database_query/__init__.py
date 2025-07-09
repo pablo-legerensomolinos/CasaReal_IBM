@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 import uvicorn
 import requests
-import instana
+# import instana
 
 
 from .Logger import Logger

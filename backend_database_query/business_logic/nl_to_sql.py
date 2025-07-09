@@ -1,7 +1,7 @@
 from datetime import datetime
 from backend_database_query.connectors.WatsonxClient import WatsonxClient
 from backend_database_query.connectors.DbManager import DatabaseManager
-from backend_database_query.env import WatsonxConfig, WatsonxAPIConfig, Db2Config, WATSONX_INTERPRET_DEPLOYMENT_ID
+from backend_database_query.env import WatsonxConfig, WatsonxAPIConfig, Db2Config, config_env
 
 
 def process_nl_query(nl_query: str) -> list:
@@ -11,18 +11,19 @@ def process_nl_query(nl_query: str) -> list:
     Returns:
         list: Lista de filas resultado de la consulta
     """
-    watsonx_config = WatsonxConfig()
+    watsonx_translator_config = WatsonxConfig(deployment_id=config_env.get("WATSONX_AI_DEPLOYMENT_ID"))
+    watsonx_interpret_config = WatsonxConfig(deployment_id=config_env.get("WATSONX_AI_DEPLOYMENT_INTERPRETATION_ID"))
     watsonx_api_config = WatsonxAPIConfig()
     db2_config = Db2Config()
 
     # 1. Traducir LN a SQL usando Watsonx
-    watsonx = WatsonxClient(watsonx_config, watsonx_api_config)
+    watsonx_translator = WatsonxClient(watsonx_translator_config, watsonx_api_config)
     
     input_params = {'user_query':nl_query}
     try:
-        sql_response = watsonx.text_generation(
+        sql_response = watsonx_translator.text_generation(
             params=input_params,
-            deployment_id=watsonx_config.deployment_id  # Viene de env.py
+            #deployment_id=watsonx_translator_config.deployment_id
         )
         sql_query = sql_response["results"][0]["generated_text"].strip()
     except Exception as e:
@@ -43,18 +44,19 @@ def process_nl_query(nl_query: str) -> list:
         return "No se encontraron resultados para la consulta."
 
     # 3. Enviar resultados tabulares a Watsonx para interpretación en LN
+    watsonx_interpret = WatsonxClient(watsonx_interpret_config, watsonx_api_config)
     results_str = str(result_rows)
     try:
-        interpretation = watsonx.text_generation(
+        interpretation = watsonx_interpret.text_generation(
             params={
                 "user_query": nl_query,
                 "query_result": results_str
             },
-            deployment_id=WATSONX_INTERPRET_DEPLOYMENT_ID
+            #deployment_id=watsonx_interpret_config
         )
         final_response = interpretation["results"][0]["generated_text"].strip()
     except Exception as e:
-        watsonx.logger.error(f"Error interpretando resultados: {e}")
+        watsonx_interpret.logger.error(f"Error interpretando resultados: {e}")
         final_response = "No se pudo generar una interpretación de los resultados."
 
     return final_response or "No se pudo generar una interpretación de los resultados."
