@@ -2,7 +2,7 @@ FROM python:3.11.11-slim-bullseye
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        curl=7.74.0-1.3+deb11u14 \
+        curl \
         tini \
     && \
     apt-get clean && \
