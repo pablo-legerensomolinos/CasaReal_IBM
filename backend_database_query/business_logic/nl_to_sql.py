@@ -1,8 +1,28 @@
 from datetime import datetime
+import re
 from backend_database_query.connectors.WatsonxClient import WatsonxClient
 from backend_database_query.connectors.DbManager import DatabaseManager
 from backend_database_query.env import WatsonxConfig, WatsonxAPIConfig, Db2Config, config_env
 
+def _clean_llm_sql(raw_sql: str) -> str:
+    """
+    Args:
+        raw_sql (str): raw LLM output that supposedly contains SQL.
+
+    Returns:
+        str: cleaned SQL string (no markdown fences, stripped) or empty string if nothing left.
+    """
+    # Remove ```sql ... ``` or ``` ... ``` blocks
+    cleaned = re.sub(r"```(?:sql)?\s*([\s\S]*?)\s*```", r"\1", raw_sql, flags=re.IGNORECASE)
+    return cleaned.strip()
+
+
+def _is_sql_query(sql: str) -> bool:
+    """
+    En funcion de la primera palabra clave, determina si es una consulta SQL.
+    """
+    first_token = sql.split(maxsplit=1)[0].lower() if sql else ""
+    return first_token in {"select", "with"}
 
 def process_nl_query(nl_query: str) -> list:
     """
@@ -30,14 +50,17 @@ def process_nl_query(nl_query: str) -> list:
             params=input_params_translator,
             #deployment_id=watsonx_translator_config.deployment_id
         )
-
-        sql_query = sql_response.strip()
         
     except Exception as e:
         return f"Error generando la consulta SQL: {e}"
 
-    if not sql_query.lower().startswith("select"):
-        return "La consulta generada no es válida. Reformula tu pregunta."
+    sql_query = _clean_llm_sql(sql_response)
+
+    if not _is_sql_query(sql_query):
+        return (
+            "La consulta generada no es válida o no comienza con SELECT/WITH. "
+            "Reformula tu pregunta."
+        )
 
     # 2. Ejecutar SQL
     db = DatabaseManager(db2_config)
