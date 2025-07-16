@@ -54,7 +54,7 @@ def process_nl_query(nl_query: str) -> list:
     except Exception as e:
         return f"Error generando la consulta SQL: {e}"
 
-    sql_query = _clean_llm_sql(sql_response)
+    sql_query = sql_response #_clean_llm_sql(sql_response)
 
     if not _is_sql_query(sql_query):
         return (
