@@ -22,12 +22,12 @@ def wxai_test():
     return {"list_models": list_models} #, "tokenize": tokenize}
 
 @watsonx_bp.post('/query', summary="Procesar consulta en lenguaje natural")
-async def wxai_nl_to_sql(request: Request):
+def wxai_nl_to_sql(request: Request):
     """
     Recibe una consulta en lenguaje natural, la traduce a SQL, ejecuta la consulta y devuelve la respuesta interpretada.
     """
     try:
-        body = await request.json()
+        body = request.json()
         question = body.get("question")
 
         if not question:
