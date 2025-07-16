@@ -27,8 +27,7 @@ def wxai_nl_to_sql(request: Request):
     Recibe una consulta en lenguaje natural, la traduce a SQL, ejecuta la consulta y devuelve la respuesta interpretada.
     """
     try:
-        body = request.json()
-        question = body.get("question")
+        question = request.question
 
         if not question:
             raise HTTPException(status_code=400, detail="Missing 'question' in request body.")
