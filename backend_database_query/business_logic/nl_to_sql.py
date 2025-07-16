@@ -65,6 +65,6 @@ def process_nl_query(nl_query: str) -> list:
         final_response = interpretation
     except Exception as e:
         watsonx_interpret.logger.error(f"Error interpretando resultados: {e}")
-        final_response = f"No se pudo generar una interpretación de los resultados. {e}"
+        final_response = f"No se pudo generar una interpretación de los resultados."
 
     return final_response

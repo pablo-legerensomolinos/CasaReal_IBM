@@ -54,8 +54,9 @@ class DatabaseManager(metaclass=Singleton):
 
     def execute_raw_sql(self, sql: str) -> list[dict]:
         """
-        Executes a raw SQL query and returns the results as a list of dictionaries.
+        Executes a raw SQL query and returns the results as a list of dictionaries, limited to 50 rows.
         """
         self.logger.info(f"Executing SQL: {sql}")
         result = self.connection.execute(text(sql))
-        return [row._mapping for row in result]
+        # Limit to 50 rows
+        return [row._mapping for idx, row in enumerate(result) if idx < 50]
