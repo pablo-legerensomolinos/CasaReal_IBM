@@ -62,7 +62,7 @@ def process_nl_query(nl_query: str) -> list:
             params=input_params_interpret,
             #deployment_id=watsonx_interpret_config
         )
-        final_response = interpretation.strip()
+        final_response = interpretation
     except Exception as e:
         watsonx_interpret.logger.error(f"Error interpretando resultados: {e}")
         final_response = f"No se pudo generar una interpretación de los resultados. {e}"
