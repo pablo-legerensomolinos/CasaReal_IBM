@@ -38,4 +38,4 @@ async def wxai_nl_to_sql(request: Request):
 
     except Exception as e:
         logger.error(f"Error procesando la consulta: {e}")
-        raise HTTPException(status_code=500, detail="Error interno al procesar la consulta.")
+        raise HTTPException(status_code=500, detail=f"Error interno al procesar la consulta.{e}")
