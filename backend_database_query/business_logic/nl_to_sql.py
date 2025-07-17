@@ -22,8 +22,7 @@ def process_nl_query(nl_query: str) -> list:
     
     input_params_translator = {
     "prompt_variables": {
-        "user_query": nl_query,
-        "date": datetime.now().strftime("%Y-%m-%d")  # or any other variable you need
+        "sentiment_query": nl_query,
     }
 }
     try:
@@ -36,6 +35,8 @@ def process_nl_query(nl_query: str) -> list:
         return f"Error generando la consulta SQL: {e}"
 
     # 2. Ejecutar SQL
+    print(f"SQL Response: {sql_response}")
+
     db = DatabaseManager(db2_config)
     try:
         result_rows = db.execute_raw_sql(sql_response)
@@ -45,6 +46,8 @@ def process_nl_query(nl_query: str) -> list:
 
     if not result_rows:
         return "No se encontraron resultados para la consulta."
+    
+    print(f"Result Rows: {result_rows}")
 
     # 3. Enviar resultados tabulares a Watsonx para interpretación en LN
     watsonx_interpret = WatsonxClient(watsonx_interpret_config, watsonx_api_config)
@@ -53,7 +56,7 @@ def process_nl_query(nl_query: str) -> list:
     input_params_interpret = {
         "prompt_variables": {
             "user_query": nl_query,
-            "query_result": results_str
+            "sentiment_results": results_str
         }
     }
 

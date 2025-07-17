@@ -8,7 +8,7 @@ import requests
 
 from .Logger import Logger
 from .env import ServerConfig
-# from .api.db_routes import db_bp
+from .api.db_routes import db_bp
 from .api.watsonx_routes import watsonx_bp
 # from .api.elastic_routes import elastic_bp
 # from .api.verify_routes import verify_bp
@@ -44,7 +44,7 @@ def create_app():
     # clients_initialitation()
 
     # Register the blueprints
-    # app.include_router(db_bp)
+    app.include_router(db_bp)
     app.include_router(watsonx_bp)
     # app.include_router(elastic_bp)
     # app.include_router(verify_bp)

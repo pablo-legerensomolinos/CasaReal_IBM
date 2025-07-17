@@ -5,6 +5,7 @@ from backend_database_query.Logger import Logger
 from backend_database_query.connectors.Singleton import Singleton
 
 from backend_database_query.models.LastFilesModel import LastFiles
+from base64 import b64encode
 
 
 class DatabaseManager(metaclass=Singleton):
@@ -40,6 +41,16 @@ class DatabaseManager(metaclass=Singleton):
             self.local_logger.info('other stuff')
         else:
             self.logger.info("Already connected to the database.")
+    
+    def test_connection(self):
+        """
+        Executes a simple query to test the DB2 connection.
+        Returns the current date from the database.
+        """
+        self.logger.info("Testing DB2 connection with SELECT CURRENT DATE")
+        result = self.connection.execute(text("SELECT CURRENT DATE AS today FROM SYSIBM.SYSDUMMY1"))
+        # Use _mapping to get a dict
+        return [dict(row._mapping) for row in result]
 
     def getLastFiles(self) -> list[LastFiles]:
         return self.session.query(LastFiles).all()
@@ -49,8 +60,17 @@ class DatabaseManager(metaclass=Singleton):
         Executes a raw SQL query and returns the results as a list of dictionaries.
         """
         self.logger.info(f"Executing SQL: {sql}")
-        result = self.connection.execute(text(sql))
-        return [dict(row) for row in result]
+        with self.connection.execute(text(sql)) as result:
+            def jsonable(row):
+                # RowMapping → plain dict
+                d = dict(row)            # ✔ mapping to dict
+                # make binary columns JSON-safe
+                for k, v in d.items():
+                    if isinstance(v, (bytes, bytearray, memoryview)):
+                        d[k] = b64encode(v).decode()
+                return d
+
+            return [jsonable(r) for r in result.mappings()]
 
     def execute_raw_sql(self, sql: str) -> list[dict]:
         """
