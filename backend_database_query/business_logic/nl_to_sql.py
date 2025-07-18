@@ -26,13 +26,15 @@ def process_nl_query(nl_query: str) -> list:
     }
 }
     try:
-        sql_response = watsonx_translator.text_generation(
+        raw_sql = watsonx_translator.text_generation(
             params=input_params_translator,
             #deployment_id=watsonx_translator_config.deployment_id
         )
         
     except Exception as e:
         return f"Error generando la consulta SQL: {e}"
+    
+    sql_response = re.sub(r'<\|.*?\|>', '', raw_sql).strip()
 
     # 2. Ejecutar SQL
     print(f"SQL Response: {sql_response}")
@@ -65,7 +67,7 @@ def process_nl_query(nl_query: str) -> list:
             params=input_params_interpret,
             #deployment_id=watsonx_interpret_config
         )
-        final_response = interpretation
+        final_response = re.sub(r'<\|.*?\|>', '', interpretation).strip()
     except Exception as e:
         watsonx_interpret.logger.error(f"Error interpretando resultados: {e}")
         final_response = f"No se pudo generar una interpretación de los resultados."
