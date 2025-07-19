@@ -5,6 +5,7 @@ from backend_database_query.Logger import Logger
 from backend_database_query.connectors.Singleton import Singleton
 
 from backend_database_query.models.LastFilesModel import LastFiles
+from base64 import b64encode
 
 
 class DatabaseManager(metaclass=Singleton):
@@ -49,14 +50,14 @@ class DatabaseManager(metaclass=Singleton):
         Executes a raw SQL query and returns the results as a list of dictionaries.
         """
         self.logger.info(f"Executing SQL: {sql}")
-        result = self.connection.execute(text(sql))
-        return [dict(row) for row in result]
+        with self.connection.execute(text(sql)) as result:
+            def jsonable(row):
+                # RowMapping → plain dict
+                d = dict(row)            # ✔ mapping to dict
+                # make binary columns JSON-safe
+                for k, v in d.items():
+                    if isinstance(v, (bytes, bytearray, memoryview)):
+                        d[k] = b64encode(v).decode()
+                return d
 
-    def execute_raw_sql(self, sql: str) -> list[dict]:
-        """
-        Executes a raw SQL query and returns the results as a list of dictionaries, limited to 50 rows.
-        """
-        self.logger.info(f"Executing SQL: {sql}")
-        result = self.connection.execute(text(sql))
-        # Limit to 50 rows
-        return [row._mapping for idx, row in enumerate(result) if idx < 50]
+            return [jsonable(r) for r in result.mappings()]

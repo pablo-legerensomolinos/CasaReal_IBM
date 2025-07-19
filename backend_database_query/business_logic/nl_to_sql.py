@@ -31,7 +31,8 @@ def process_nl_query(nl_query: str) -> list:
             params=input_params_translator,
             #deployment_id=watsonx_translator_config.deployment_id
         )
-        
+        print(f"SQL Response: {sql_response}")
+
     except Exception as e:
         return f"Error generando la consulta SQL: {e}"
 
@@ -39,6 +40,7 @@ def process_nl_query(nl_query: str) -> list:
     db = DatabaseManager(db2_config)
     try:
         result_rows = db.execute_raw_sql(sql_response)
+        print(f"Result Rows: {result_rows}")
     except Exception as e:
         db.logger.error(f"Error ejecutando SQL: {e}")
         return "Error al ejecutar la consulta en la base de datos."
