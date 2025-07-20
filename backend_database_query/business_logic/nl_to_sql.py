@@ -39,7 +39,7 @@ def process_nl_query(nl_query: str) -> list:
     # 2. Ejecutar SQL
     db = DatabaseManager(db2_config)
     try:
-        result_rows = db.execute_raw_sql(sql_response)
+        result_rows = db.execute_sql(sql_response)
         print(f"Result Rows: {result_rows}")
     except Exception as e:
         db.logger.error(f"Error ejecutando SQL: {e}")
